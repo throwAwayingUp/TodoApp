@@ -1,10 +1,5 @@
 import React, { useContext } from "react";
-import {
-  AccessTimeRounded,
-  CalendarTodayRounded,
-  MoveUpRounded,
-  SortByAlphaRounded,
-} from "@mui/icons-material";
+import { AccessTimeRounded, MoveUpRounded, SortByAlphaRounded } from "@mui/icons-material";
 import { Button, css, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from "@mui/material";
 import { TaskContext } from "../../contexts/TaskContext";
 import styled from "@emotion/styled";
@@ -20,11 +15,6 @@ const sortOptions: {
     value: "dateCreated",
     label: "Date Created",
     icon: <AccessTimeRounded fontSize="small" />,
-  },
-  {
-    value: "dueDate",
-    label: "Due Date",
-    icon: <CalendarTodayRounded fontSize="small" />,
   },
   {
     value: "alphabetical",
@@ -54,7 +44,8 @@ export const TaskSort = () => {
     }
   };
 
-  const currentSortOption = sortOptions.find((option) => option.value === sortOption);
+  const currentSortOption =
+    sortOptions.find((option) => option.value === sortOption) ?? sortOptions[0];
 
   return (
     <>

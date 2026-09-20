@@ -12,8 +12,6 @@ import {
   TaskName,
   TaskDate,
   TaskDescription,
-  TimeLeft,
-  RingAlarm,
   StyledRadio,
   RadioChecked,
   RadioUnchecked,
@@ -22,7 +20,7 @@ import {
   TaskActionsContainer,
   DragHandle,
 } from "./tasks.styled";
-import { calculateDateDifference, formatDate, getFontColor, systemInfo } from "../../utils";
+import { formatDate, getFontColor, systemInfo } from "../../utils";
 import { RenderTaskDescription } from "./RenderTaskDescription";
 import { CategoryBadge } from "..";
 import { UserContext } from "../../contexts/UserContext";
@@ -188,39 +186,6 @@ export const TaskItem = memo(
               enableMoreButton={!!actions}
             />
           </TaskDescription>
-
-          {task.deadline && (
-            <Tooltip
-              title={
-                moveMode && enableMoveMode
-                  ? ""
-                  : new Intl.DateTimeFormat(navigator.language, {
-                      dateStyle: "full",
-                      timeStyle: "medium",
-                    }).format(new Date(task.deadline))
-              }
-              placement="bottom-start"
-            >
-              <TimeLeft done={task.done} translate="yes">
-                <RingAlarm
-                  fontSize="small"
-                  animate={new Date() > new Date(task.deadline) && !task.done}
-                  sx={{
-                    color: `${getFontColor(task.color)} !important`,
-                  }}
-                />{" "}
-                &nbsp;
-                {new Date(task.deadline).toLocaleDateString()} {" • "}
-                {new Date(task.deadline).toLocaleTimeString()}
-                {!task.done && (
-                  <>
-                    {" • "}
-                    {calculateDateDifference(new Date(task.deadline))}
-                  </>
-                )}
-              </TimeLeft>
-            </Tooltip>
-          )}
 
           {task.sharedBy && (
             <SharedByContainer translate="yes">

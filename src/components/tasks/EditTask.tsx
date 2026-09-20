@@ -1,15 +1,6 @@
 import styled from "@emotion/styled";
-import { CancelRounded, EditCalendarRounded, SaveRounded } from "@mui/icons-material";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  IconButton,
-  InputAdornment,
-  TextField,
-  TextFieldProps,
-  Tooltip,
-} from "@mui/material";
+import { EditCalendarRounded, SaveRounded } from "@mui/icons-material";
+import { Dialog, DialogActions, DialogContent, TextField, TextFieldProps } from "@mui/material";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { ColorPicker, CustomDialogTitle, CustomEmojiPicker } from "..";
 import { DESCRIPTION_MAX_LENGTH, TASK_NAME_MAX_LENGTH } from "../../constants";
@@ -92,7 +83,6 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
             color: editedTask.color,
             emoji: editedTask.emoji || undefined,
             description: editedTask.description || undefined,
-            deadline: editedTask.deadline || undefined,
             category: editedTask.category || undefined,
             lastSave: new Date(),
           };
@@ -207,48 +197,6 @@ export const EditTask = ({ open, task, onClose }: EditTaskProps) => {
                 : `${editedTask?.description?.length}/${DESCRIPTION_MAX_LENGTH}`
           }
         />
-        <StyledInput
-          label="Deadline date"
-          name="deadline"
-          type="datetime-local"
-          value={
-            editedTask?.deadline
-              ? new Date(editedTask.deadline).toLocaleString("sv").replace(" ", "T").slice(0, 16)
-              : ""
-          }
-          onChange={handleInputChange}
-          slotProps={{
-            inputLabel: {
-              shrink: true,
-            },
-            input: {
-              startAdornment: editedTask?.deadline ? (
-                <InputAdornment position="start">
-                  <Tooltip title="Clear">
-                    <IconButton
-                      color="error"
-                      onClick={() => {
-                        setEditedTask((prevTask) => ({
-                          ...(prevTask as Task),
-                          deadline: undefined,
-                        }));
-                      }}
-                    >
-                      <CancelRounded />
-                    </IconButton>
-                  </Tooltip>
-                </InputAdornment>
-              ) : undefined,
-            },
-          }}
-          sx={{
-            colorScheme: theme.darkmode ? "dark" : "light",
-            " & .MuiInputBase-root": {
-              transition: ".3s all",
-            },
-          }}
-        />
-
         {settings.enableCategories !== undefined && settings.enableCategories && (
           <CategorySelect
             fontColor={theme.darkmode ? ColorPalette.fontLight : ColorPalette.fontDark}

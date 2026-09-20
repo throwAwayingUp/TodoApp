@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import { Alarm, RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
+import { RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
 import { Checkbox, IconButton, TextField, css } from "@mui/material";
-import { fadeIn, ring, scale } from "../../styles/keyframes.styled";
+import { fadeIn, scale } from "../../styles/keyframes.styled";
 import { ColorPalette } from "../../theme/themeConfig";
 import { getFontColor, isDark, systemInfo } from "../../utils";
 import { reduceMotion } from "../../styles/reduceMotion.styled";
@@ -157,23 +157,6 @@ export const TasksContainer = styled.main`
   margin: 0 auto;
   flex-direction: column;
   gap: 6px;
-`;
-
-export const TimeLeft = styled.span<{ done: boolean }>`
-  text-decoration: ${({ done }) => (done ? "line-through" : "none")};
-  transition: 0.3s all;
-  font-size: 16px;
-  margin: 4px 0;
-  font-weight: 400;
-  display: flex;
-  backdrop-filter: none !important;
-  @media (max-width: 768px) {
-    font-size: 14px;
-  }
-  // fix for browser translate
-  & font {
-    margin: 0 1px;
-  }
 `;
 
 export const SharedByContainer = styled.div`
@@ -349,26 +332,6 @@ export const SearchInput = styled(TextField)`
 export const SearchClear = styled(IconButton)`
   animation: ${scale} 0.3s ease;
   transition: 0.3s all;
-`;
-
-const ringAnimation = "2s 0.5s ease-in-out infinite";
-
-export const RingAlarm = styled(Alarm)<{ animate?: boolean }>`
-  color: red;
-  ${({ animate }) =>
-    animate &&
-    css`
-      -webkit-animation: ${ring} ${ringAnimation};
-      -moz-animation: ${ring} ${ringAnimation};
-      animation: ${ring} ${ringAnimation};
-    `}
-  @media print {
-    color: black !important;
-    -webkit-animation: none;
-    -moz-animation: none;
-    animation: none;
-  }
-  ${({ theme }) => reduceMotion(theme)}
 `;
 
 export const TaskActionsContainer = styled.div`

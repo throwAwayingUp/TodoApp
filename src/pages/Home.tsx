@@ -16,7 +16,7 @@ import {
 import { Emoji } from "emoji-picker-react";
 import { Box, Button, CircularProgress, Tooltip, Typography } from "@mui/material";
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
-import { AddRounded, CloseRounded, TodayRounded, UndoRounded, WifiOff } from "@mui/icons-material";
+import { AddRounded, CloseRounded, UndoRounded, WifiOff } from "@mui/icons-material";
 import { UserContext } from "../contexts/UserContext";
 import { useResponsiveDisplay } from "../hooks/useResponsiveDisplay";
 import { useNavigate } from "react-router-dom";
@@ -44,22 +44,9 @@ const Home = () => {
     const completedCount = tasks.filter((task) => task.done).length;
     const completedPercentage = tasks.length > 0 ? (completedCount / tasks.length) * 100 : 0;
 
-    const today = new Date().setHours(0, 0, 0, 0);
-    const dueTodayTasks = tasks.filter((task) => {
-      if (task.deadline) {
-        const taskDeadline = new Date(task.deadline).setHours(0, 0, 0, 0);
-        return taskDeadline === today && !task.done;
-      }
-      return false;
-    });
-
-    const taskNamesDueToday = dueTodayTasks.map((task) => task.name);
-
     return {
       completedTasksCount: completedCount,
       completedTaskPercentage: completedPercentage,
-      tasksWithDeadlineTodayCount: dueTodayTasks.length,
-      tasksDueTodayNames: taskNamesDueToday,
     };
   }, [tasks]);
 
@@ -174,22 +161,6 @@ const Home = () => {
                   : `You've completed ${taskStats.completedTasksCount} out of ${tasks.length} tasks.`}
               </TaskCountHeader>
               <TaskCompletionText>{taskCompletionText}</TaskCompletionText>
-              {taskStats.tasksWithDeadlineTodayCount > 0 && (
-                <span
-                  style={{
-                    opacity: 0.8,
-                    display: "inline-block",
-                  }}
-                >
-                  <TodayRounded sx={{ fontSize: "20px", verticalAlign: "middle" }} />
-                  &nbsp;Tasks due today:&nbsp;
-                  <span translate="no">
-                    {new Intl.ListFormat("en", { style: "long" }).format(
-                      taskStats.tasksDueTodayNames,
-                    )}
-                  </span>
-                </span>
-              )}
             </TaskCountTextContainer>
           </TasksCount>
         </TasksCountContainer>

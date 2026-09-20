@@ -2,14 +2,13 @@ import { Category, Task } from "../types/user";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddTaskButton, Container, StyledInput } from "../styles";
-import { AddTaskRounded, CancelRounded } from "@mui/icons-material";
-import { IconButton, InputAdornment, Tooltip } from "@mui/material";
+import { AddTaskRounded } from "@mui/icons-material";
 import { DESCRIPTION_MAX_LENGTH, TASK_NAME_MAX_LENGTH } from "../constants";
 import { ColorPicker, TopBar, CustomEmojiPicker } from "../components";
 import { UserContext } from "../contexts/UserContext";
 import { useStorageState } from "../hooks/useStorageState";
 import { useTheme } from "@emotion/react";
-import { generateUUID, getFontColor, isDark, showToast } from "../utils";
+import { generateUUID, getFontColor, showToast } from "../utils";
 import { ColorPalette } from "../theme/themeConfig";
 import InputThemeProvider from "../contexts/InputThemeProvider";
 import { CategorySelect } from "../components/CategorySelect";
@@ -26,7 +25,6 @@ const AddTask = () => {
     "description",
     "sessionStorage",
   );
-  const [deadline, setDeadline] = useStorageState<string>("", "deadline", "sessionStorage");
   const [nameError, setNameError] = useState<string>("");
   const [descriptionError, setDescriptionError] = useState<string>("");
   const [selectedCategories, setSelectedCategories] = useStorageState<Category[]>(
@@ -34,8 +32,6 @@ const AddTask = () => {
     "categories",
     "sessionStorage",
   );
-
-  const [isDeadlineFocused, setIsDeadlineFocused] = useState<boolean>(false);
 
   const n = useNavigate();
   const { toasts } = useToasterStore();
@@ -81,10 +77,6 @@ const AddTask = () => {
     }
   };
 
-  const handleDeadlineChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDeadline(event.target.value);
-  };
-
   const handleAddTask = () => {
     if (name === "") {
       showToast("Task name is required.", {
@@ -109,7 +101,6 @@ const AddTask = () => {
       emoji: emoji ? emoji : undefined,
       color,
       date: new Date(),
-      deadline: deadline !== "" ? new Date(deadline) : undefined,
       category: selectedCategories ? selectedCategories : [],
     };
 
@@ -183,35 +174,6 @@ const AddTask = () => {
                   : descriptionError
             }
           />
-          <StyledInput
-            label="Task Deadline"
-            name="name"
-            placeholder="Enter deadline date"
-            type="datetime-local"
-            value={deadline}
-            onChange={handleDeadlineChange}
-            onFocus={() => setIsDeadlineFocused(true)}
-            onBlur={() => setIsDeadlineFocused(false)}
-            hidetext={(!deadline || deadline === "") && !isDeadlineFocused} // fix for label overlapping with input
-            sx={{
-              colorScheme: isDark(theme.secondary) ? "dark" : "light",
-            }}
-            slotProps={{
-              input: {
-                startAdornment:
-                  deadline && deadline !== "" ? (
-                    <InputAdornment position="start">
-                      <Tooltip title="Clear">
-                        <IconButton color="error" onClick={() => setDeadline("")}>
-                          <CancelRounded />
-                        </IconButton>
-                      </Tooltip>
-                    </InputAdornment>
-                  ) : undefined,
-              },
-            }}
-          />
-
           {user.settings.enableCategories !== undefined && user.settings.enableCategories && (
             <div style={{ marginBottom: "14px" }}>
               <br />

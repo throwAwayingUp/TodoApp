@@ -84,12 +84,6 @@ const TaskDetails = () => {
                 <TableData>{dateFormatter.format(new Date(task.lastSave))}</TableData>
               </TableRow>
             )}
-            {task?.deadline && (
-              <TableRow>
-                <TableHeader>Task deadline:</TableHeader>
-                <TableData>{dateFormatter.format(new Date(task.deadline))}</TableData>
-              </TableRow>
-            )}
             <TableRow>
               <TableHeader>Done:</TableHeader>
               <TableData>

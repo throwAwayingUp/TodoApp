@@ -28,3 +28,8 @@ dev-dist
 
 # Vite cache
 /.cache
+
+# Local visual navigation runner
+.venv/
+__pycache__/
+vnav_harness_events.jsonl

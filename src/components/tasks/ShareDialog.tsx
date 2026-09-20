@@ -111,9 +111,7 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
   const handleAddToAppleCalendar = () => {
     if (!selectedTask) return;
 
-    const deadline = formatICSDate(
-      selectedTask.deadline ? new Date(selectedTask.deadline) : new Date(),
-    );
+    const eventDate = formatICSDate(new Date());
 
     let { description = "" } = selectedTask;
     const urlMatch = description.match(/(https?:\/\/[^\s]+)/);
@@ -126,8 +124,8 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
       "BEGIN:VEVENT",
       `SUMMARY:${selectedTask.name}`,
       `DESCRIPTION:${description}`,
-      `DTSTART:${deadline}`,
-      `DTEND:${deadline}`,
+      `DTSTART:${eventDate}`,
+      `DTEND:${eventDate}`,
       eventUrl ? `URL:${eventUrl}` : "",
       "END:VEVENT",
       "END:VCALENDAR",

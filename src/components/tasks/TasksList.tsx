@@ -32,7 +32,6 @@ import type { Category, Task, UUID } from "../../types/user";
 import { getFontColor, showToast } from "../../utils";
 import {
   NoTasks,
-  RingAlarm,
   SearchClear,
   SearchInput,
   TaskActionContainer,
@@ -42,7 +41,6 @@ import {
 } from "./tasks.styled";
 import { TaskMenu } from "./TaskMenu";
 import { TaskIcon } from "../TaskIcon";
-import { useToasterStore } from "react-hot-toast";
 import { TaskSort } from "./TaskSort";
 import {
   DndContext,
@@ -121,7 +119,6 @@ export const TasksList: React.FC = () => {
 
   const isMobile = useResponsiveDisplay();
   const theme = useTheme();
-  const { toasts } = useToasterStore();
 
   const listFormat = useMemo(
     () =>
@@ -197,12 +194,10 @@ export const TasksList: React.FC = () => {
             return [...tasks].sort(
               (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
             );
-          case "dueDate":
-            return [...tasks].sort((a, b) => {
-              if (!a.deadline) return 1;
-              if (!b.deadline) return -1;
-              return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
-            });
+          case "dueDate": // Legacy saved preference; sort by creation date now.
+            return [...tasks].sort(
+              (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+            );
           case "alphabetical":
             return [...tasks].sort((a, b) => a.name.localeCompare(b.name));
           case "custom":
@@ -321,48 +316,6 @@ export const TasksList: React.FC = () => {
     setCategories(uniqueCategories);
     setCategoryCounts(counts);
   }, [user.tasks, search, setCategories, setCategoryCounts, orderedTasks]);
-
-  const checkOverdueTasks = useCallback(
-    (tasks: Task[]) => {
-      if (location.pathname === "/share") {
-        return;
-      }
-
-      const overdueTasks = tasks.filter(
-        (task) => task.deadline && new Date() > new Date(task.deadline) && !task.done,
-      );
-
-      if (overdueTasks.length > 0) {
-        const taskNames = overdueTasks.map((task) => task.name);
-
-        showToast(
-          <div translate="no" style={{ wordBreak: "break-word" }}>
-            <b translate="yes">Overdue task{overdueTasks.length > 1 && "s"}: </b>
-            {listFormat.format(taskNames)}
-          </div>,
-          {
-            id: "overdue-tasks",
-            type: "error",
-            disableVibrate: true,
-            preventDuplicate: true,
-            visibleToasts: toasts,
-            duration: 3400,
-            icon: <RingAlarm animate sx={{ color: ColorPalette.red }} />,
-            style: {
-              borderColor: ColorPalette.red,
-              boxShadow: user.settings.enableGlow ? `0 0 18px -8px ${ColorPalette.red}` : "none",
-            },
-          },
-        );
-      }
-    },
-    [listFormat, toasts, user.settings.enableGlow],
-  );
-
-  useEffect(() => {
-    checkOverdueTasks(user.tasks);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const dndKitSensors = useSensors(
     useSensor(MouseSensor),

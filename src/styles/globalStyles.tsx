@@ -44,9 +44,6 @@ export const GlobalStyles = () => {
         .no-transition *::after {
           transition: none !important;
         }
-        input[type="datetime-local"]:placeholder-shown {
-          color: transparent !important;
-        }
         img {
           -webkit-user-select: none;
           -khtml-user-select: none;

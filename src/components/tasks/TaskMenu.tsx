@@ -27,7 +27,7 @@ import { TaskIcon, TaskItem } from "..";
 import { UserContext } from "../../contexts/UserContext";
 import { useResponsiveDisplay } from "../../hooks/useResponsiveDisplay";
 import { Task } from "../../types/user";
-import { calculateDateDifference, generateUUID, showToast } from "../../utils";
+import { generateUUID, showToast } from "../../utils";
 import { useTheme } from "@emotion/react";
 import { TaskContext } from "../../contexts/TaskContext";
 import { ColorPalette } from "../../theme/themeConfig";
@@ -156,14 +156,7 @@ export const TaskMenu = () => {
       timeStyle: "short",
     }).format(new Date(selectedTask?.date || ""));
 
-    const taskDeadline = selectedTask?.deadline
-      ? `. Task Deadline: ${calculateDateDifference(
-          new Date(selectedTask.deadline),
-          voice ? voice.lang : navigator.language,
-        )}`
-      : "";
-
-    const textToRead = `${taskName}${taskDescription}Date: ${taskDate}${taskDeadline}`;
+    const textToRead = `${taskName}${taskDescription}Date: ${taskDate}`;
 
     const utterThis: SpeechSynthesisUtterance = new SpeechSynthesisUtterance(textToRead);
 
